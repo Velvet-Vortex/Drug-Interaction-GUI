@@ -350,6 +350,51 @@ def save_json(drug_info: Dict, filename: str = None):
     return filename
 
 
+# Helper function to generate standardized array
+def get_formatted_output_array(drug_info: Dict) -> List:
+    """
+    Format the drug info into the standardized array structure:
+    [0] Drug 1, [1] Drug 2, [2] Severity, [3] URL, [4] Description, [5] Extras
+    """
+    if not drug_info:
+        return ["Unknown", "N/A", "N/A", "N/A", "No data found", {}]
+        
+    side_effects = drug_info.get('side_effects', {})
+    
+    # Consolidate description text for [4]
+    desc_parts = []
+    if side_effects.get('serious'):
+        # Take top 3 serious effects
+        top_serious = side_effects['serious'][:3]
+        desc_parts.append(f"SERIOUS: {'; '.join(top_serious)}")
+        
+    if side_effects.get('common'):
+        # Take top 3 common effects
+        top_common = side_effects['common'][:3]
+        desc_parts.append(f"COMMON: {'; '.join(top_common)}")
+        
+    description = " | ".join(desc_parts) if desc_parts else "No detailed side effects extracted."
+    
+    # [5] Extras - Everything else as a dictionary
+    extras = {
+        'all_side_effects': side_effects,
+        'cached_at': drug_info.get('cached_at'),
+        'search_term': drug_info.get('search_term')
+    }
+    
+    # Create the array [0] Drug 1, [1] Drug 2, [2] Severity, [3] URL, [4] Description, [5] Extras
+    output_array = [
+        drug_info.get('title', 'Unknown'),  # [0] Drug 1
+        "N/A",                              # [1] Drug 2 (Not applicable for single drug)
+        "N/A",                              # [2] Severity (Not applicable for single drug)
+        drug_info.get('url', 'N/A'),        # [3] URL
+        description,                        # [4] Description
+        extras                              # [5] Extras (Full dictionary)
+    ]
+    
+    return output_array
+
+
 def main():
     """Main function with enhanced features."""
     
@@ -407,19 +452,25 @@ def main():
         print("  • Try the generic name (e.g., 'acetaminophen' not 'Tylenol')")
         print("  • Try just the drug name without dosage")
         print("  • Visit https://medlineplus.gov/druginformation.html to verify")
+        
+        # Print empty array for I/O consistency if not found
+        print("\n" + "=" * 70)
+        print("FINAL OUTPUT ARRAY")
+        print("=" * 70)
+        # [0] Drug 1, [1] Drug 2, [2] Severity, [3] URL, [4] Description, [5] Extras
+        print([drug_name, "N/A", "N/A", "N/A", "Not Found", {}])
         return
     
     # Display results
     print_side_effects(drug_info)
     
-    # Offer to save
-    if drug_info['side_effects']['metadata']['sections_found'] > 0:
-        save = input("\n💾 Save as JSON file? (y/n): ").strip().lower()
-        if save == 'y':
-            save_json(drug_info)
-    
-    print("\n✅ Done!")
-    print(f"💡 Tip: Use '--list' to see cached drugs or '--stats' for database info")
+    # OUTPUT: Print the formalized array for I/O
+    print("\n" + "=" * 70)
+    print("FINAL OUTPUT ARRAY")
+    print("=" * 70)
+    # [0] Drug 1, [1] Drug 2, [2] Severity, [3] URL, [4] Description, [5] Extras
+    output_array = get_formatted_output_array(drug_info)
+    print(output_array)
 
 
 if __name__ == "__main__":
@@ -431,3 +482,4 @@ if __name__ == "__main__":
         print(f"\nAn unhandled error occurred: {e}")
         import traceback
         traceback.print_exc()
+
