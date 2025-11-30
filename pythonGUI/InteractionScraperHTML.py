@@ -224,10 +224,10 @@ class DrugInteractionScraper:
         """Scrape all available information."""
         if not self.fetch_page():
             return None
-        
+
         print("\nExtracting interaction data...")
         print("-" * 70)
-        
+
         #Prep a list for all the extracted data
         self.interaction_data['url'] = self.url
         #Extract all components with associated methods
@@ -307,10 +307,10 @@ def main():
     
     #Check command line arguments
     if len(sys.argv) < 2:
-        print("Usage: python drug_interaction_scraper.py <url> [output_file.json]")
-        print("\nExample:")
-        print('  python drug_interaction_scraper.py "https://www.drugs.com/drug-interactions/warfarin-with-aspirin-1247-0-198-439.html"')
-        print('  python drug_interaction_scraper.py "<url>" output.json')
+        # print("Usage: python drug_interaction_scraper.py <url> [output_file.json]")
+        # print("\nExample:")
+        # print('  python drug_interaction_scraper.py "https://www.drugs.com/drug-interactions/warfarin-with-aspirin-1247-0-198-439.html"')
+        # print('  python drug_interaction_scraper.py "<url>" output.json')
         sys.exit(1)
     
     #This sets the drug interaction link

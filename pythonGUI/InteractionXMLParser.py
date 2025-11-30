@@ -10,7 +10,7 @@ import sys
 import os
 
 # Import the scraper to get the detailed data for the array
-from interactionScraperHTML import DrugInteractionScraper
+from InteractionScraperHTML import DrugInteractionScraper
 
 # Gets the sitemap for the Interaction Website
 # Makes a library of searchable URLS
@@ -129,18 +129,23 @@ class DrugInteractionParser:
             return []
 
 # main() to run the drug interaction checks
-def main():
-    
-    # Manually set the XML file name
-    xml_file = "drug-interactions.xml" 
-    
-    # Manually set the two drugs
-    drug1 = "acebutolol"
-    drug2 = "taurine"
-    
-    # Create parser and check interaction
-    parser = DrugInteractionParser(xml_file)
-    results = parser.search_drug_interactions(drug1, drug2)
+def get_drug_interactions(drug1, drug2):
+
+    # List all the XML files to search
+    xml_files = [
+        "drug-drug-interactions/drug-drug-interactions.xml",
+        "drug-drug-interactions/drug-drug-interactions2.xml",
+        "drug-drug-interactions/drug-drug-interactions3.xml",
+        "drug-drug-interactions/drug-drug-interactions4.xml",
+        "drug-drug-interactions/drug-drug-interactions5.xml",
+    ]
+
+    results = []
+
+    for xml_file in xml_files:
+        # Create parser and check interaction
+        parser = DrugInteractionParser(xml_file)
+        results = parser.search_drug_interactions(drug1, drug2)
 
     # Initialize the Output Array with defaults
     # [0] Drug 1, [1] Drug 2, [2] Severity, [3] URL, [4] Description, [5] Extras
@@ -186,14 +191,14 @@ def main():
     print("\n" + "=" * 70)
     print("INTERACTION SUMMARY")
     print("=" * 70)
-    
+
     # Format: drug1 drug2 \n Applies to: drug1 and drug2 \n description \n URL
     if output_array[2] != "N/A" and output_array[4] != "No interaction found":
         summary = f"{output_array[0]} {output_array[1]}\nApplies to: {output_array[0]} and {output_array[1]}\n{output_array[4]}\n{output_array[3]}"
         print(summary)
     else:
         print(f"No interaction found between {drug1} and {drug2}")
-    
+
     print("\n" + "=" * 70)
     print("FINAL OUTPUT ARRAY")
     print("=" * 70)
@@ -201,6 +206,4 @@ def main():
     print(output_array)
 
 if __name__ == "__main__":
-    main()
-
-
+    get_drug_interactions("caffeine", "acetate")

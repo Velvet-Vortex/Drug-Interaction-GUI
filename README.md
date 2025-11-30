@@ -130,3 +130,6 @@ save_to_file(drug name, title, url, side effect data)
 - Searches for self.interactions for matching drug URLs and returns the matching ones
 
   
+
+
+This project includes code and documentation generated with the assistance of ChatGPT (OpenAI), using GPT-5.1 on November 2025.
