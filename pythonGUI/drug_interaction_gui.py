@@ -4,16 +4,21 @@ by Martin Fitzpatrick found at https://www.pythonguis.com/faq/pyside6-drag-drop-
 '''
 
 from PySide6.QtCore import Qt, Signal, QPoint
+from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QApplication,
     QLabel,
     QWidget,
     QMainWindow,
     QVBoxLayout,
+    QHBoxLayout,
     QPushButton,
     QInputDialog,
     QTextEdit,
     QMessageBox,
+    QGraphicsDropShadowEffect,
+    QSizePolicy,
+    QSplitter,
 )
 
 # Import the interaction + MedlinePlus logic
@@ -28,17 +33,26 @@ class DragComponent(QLabel):
         super().__init__(text, parent)
         self.setContentsMargins(25, 5, 25, 5)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # Simple visual style
         self.setStyleSheet(
             """
             QLabel {
-                border: 2px solid #cccccc;
+                background-color: #001f3f;
+                color: #e6f2ff;
+                border: 2px solid #3399ff;
                 border-radius: 10px;
-                background-color: #f0f0f0;
-                color: #202020;
+            }
+            QLabel:hover {
+                border: 2px solid #66b3ff;
             }
             """
         )
+
+        glow = QGraphicsDropShadowEffect(self)
+        glow.setBlurRadius(25)
+        glow.setColor(QColor("#3399ff"))
+        glow.setOffset(0, 0)
+        self.setGraphicsEffect(glow)
+
         # Store data separately from display label, but use label for default
         self.data = text
         self._drag_offset = QPoint(0, 0)
@@ -64,7 +78,6 @@ class DragComponent(QLabel):
         super().mouseReleaseEvent(e)
         self.moved.emit()
 
-
 class Canvas(QWidget):
     overlapped = Signal(str, str)
 
@@ -72,7 +85,12 @@ class Canvas(QWidget):
         super().__init__(parent)
         self.items = []
         self.setMinimumSize(400, 600)
-        self.setStyleSheet("background: #383838; border: 1px solid gray;")
+        self.setStyleSheet(
+            """
+                background-color: #001733;
+                border: 1px solid #333333;
+            """
+        )
 
     def add_component(self, text):
         comp = DragComponent(text, self)
@@ -102,23 +120,42 @@ class MainWindow(QMainWindow):
     def __init__(self):
         # Initializes parent class
         super().__init__()
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(100, 100, 1200, 800)
         self.setWindowTitle("Drug Interaction Explorer")
 
         self.canvas = Canvas(self)
 
         self.add_button = QPushButton("Add Drug")
         self.add_button.clicked.connect(self.add_new_component)
+        self.add_button.setFixedHeight(48)
+        self.add_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.add_button.setStyleSheet(
+            """
+            QPushButton {
+                background-color: #0074D9;
+                color: #ffffff;
+                border-radius: 12px;
+                padding: 8px 24px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #3399FF;
+            }
+            QPushButton:pressed {
+                background-color: #0053A6;
+            }
+            """
+        )
 
-        # Text panel to show interaction and side effect info
         self.result_panel = QTextEdit()
         self.result_panel.setReadOnly(True)
         self.result_panel.setMinimumHeight(200)
         self.result_panel.setStyleSheet(
             """
             QTextEdit {
-                background-color: #1e1e1e;
-                color: #f0f0f0;
+                background-color: #000066;
+                color: #ffffff;
                 border: 1px solid #555555;
             }
             """
@@ -126,9 +163,17 @@ class MainWindow(QMainWindow):
 
         container = QWidget()
         layout = QVBoxLayout(container)
-        layout.addWidget(self.add_button)
-        layout.addWidget(self.canvas, 2)
-        layout.addWidget(self.result_panel, 1)
+        button_row = QHBoxLayout()
+        button_row.addStretch()
+        button_row.addWidget(self.add_button)
+
+        layout.addLayout(button_row)
+        splitter = QSplitter(Qt.Vertical)
+        splitter.addWidget(self.canvas)
+        splitter.addWidget(self.result_panel)
+        splitter.setSizes([600, 400])
+        layout.addWidget(splitter)
+
         self.setCentralWidget(container)
 
         # Pre-populate a few drugs
