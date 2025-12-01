@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 import sys
 # RegEx performs string parsing for data
 import re
+# For JSON output
+import json
 
 # Initializes Scraper Object and sets the HTML from the other program
 class DrugInteractionScraper:
@@ -272,6 +274,20 @@ class DrugInteractionScraper:
         
         print("\n" + "=" * 70)
 
+    def save_to_json(self, output_file='interaction_data.json'):
+        #Handle the case of no data returning
+        if not self.interaction_data:
+            print("No data to save.")
+            return
+
+        #This block saves all the data to a file named interation_data.json
+        try:
+            with open(output_file, 'w', encoding='utf-8') as f:
+                json.dump(self.interaction_data, f, indent=2, ensure_ascii=False)
+            print(f"\n✓ Data saved to {output_file}")
+        except Exception as e:
+            print(f"✗ Error saving to JSON: {e}")
+
 # Quick helper for external use.
 def get_interaction_description(url):
     """Quick helper for external use."""
@@ -281,26 +297,19 @@ def get_interaction_description(url):
         return scraper.interaction_data['description'][0]
     return None
 
-# Run the code and test every method/function
+# Run and test the code
 def main():
     """Main function to run the scraper."""
-    # Check command line arguments
-    if len(sys.argv) < 2:
-        print("Usage: python drug_interaction_scraper.py <url> [output_file.json]")
-        print("\nExample:")
-        print('  python drug_interaction_scraper.py "https://www.drugs.com/drug-interactions/warfarin-with-aspirin-1247-0-198-439.html"')
-        print('  python drug_interaction_scraper.py "<url>" output.json')
-        sys.exit(1)
-    
-    # This sets the drug interaction link
-    url = sys.argv[1]
-    
+    # Hard code an example for demo purposes
+    url = "https://www.drugs.com/drug-interactions/zyrtec-with-zzzquil-569-286-896-16076.html"
+
     # Create scraper and extract data
     scraper = DrugInteractionScraper(url)
     data = scraper.scrape_all()
-    
+
     if data:
         scraper.print_summary()
+        scraper.save_to_json('interaction_data.json')
     else:
         print("Failed to scrape interaction data.")
         sys.exit(1)

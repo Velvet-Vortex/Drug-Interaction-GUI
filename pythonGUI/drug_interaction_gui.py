@@ -3,7 +3,13 @@ Code was adapted from the article "Drag & Drop Widgets with PySide6"
 by Martin Fitzpatrick found at https://www.pythonguis.com/faq/pyside6-drag-drop-widgets/
 '''
 
-from PySide6.QtCore import Qt, Signal, QPoint
+from PySide6.QtCore import (
+    Qt,
+    Signal,
+    QPoint,
+    QPropertyAnimation,
+    QEasingCurve,
+)
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QApplication,
@@ -14,11 +20,13 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QPushButton,
     QInputDialog,
-    QTextEdit,
     QMessageBox,
     QGraphicsDropShadowEffect,
     QSizePolicy,
     QSplitter,
+    QStackedLayout,
+    QGraphicsOpacityEffect,
+    QScrollArea,
 )
 
 # Import the interaction + MedlinePlus logic
@@ -40,6 +48,7 @@ class DragComponent(QLabel):
                 color: #e6f2ff;
                 border: 2px solid #3399ff;
                 border-radius: 10px;
+                font-size: 16px;
             }
             QLabel:hover {
                 border: 2px solid #66b3ff;
@@ -84,7 +93,7 @@ class Canvas(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.items = []
-        self.setMinimumSize(400, 600)
+        self.setMinimumSize(400, 0)
         self.setStyleSheet(
             """
                 background-color: #001733;
@@ -97,8 +106,8 @@ class Canvas(QWidget):
         comp.adjustSize()
 
         # Simple staggered starting positions
-        offset = 30 * len(self.items)
-        start_pos = QPoint(20 + offset, 20 + offset)
+        offset = 50 * len(self.items)
+        start_pos = QPoint(40 + offset, 40 + offset)
         comp.move(start_pos)
         comp.show()
 
@@ -114,6 +123,107 @@ class Canvas(QWidget):
                 if a.geometry().intersects(b.geometry()):
                     # Emit signal with their labels
                     self.overlapped.emit(a.text(), b.text())
+
+
+class FlashCards(QWidget):
+    def __init__(self, front_text: str, back_text: str, parent=None):
+        super().__init__(parent)
+
+        self.front_label = QLabel(front_text)
+        self.back_label = QLabel(back_text)
+
+        for lbl in (self.front_label, self.back_label):
+            lbl.setAlignment(Qt.AlignCenter)
+            lbl.setWordWrap(True)
+            lbl.setStyleSheet(
+                """
+                QLabel {
+                    background-color: #001f3f;
+                    color: #e6f2ff;
+                    border: 2px solid #3399ff;
+                    border-radius: 10px;
+                    font-size: 16px;
+                }
+                QLabel:hover {
+                    border: 2px solid #66b3ff;
+                }
+                """
+            )
+            lbl.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+
+        self.stack = QStackedLayout()
+        self.stack.addWidget(self.front_label)
+        self.stack.addWidget(self.back_label)
+        self.stack.setCurrentIndex(0)
+
+        root_layout = QVBoxLayout(self)
+        root_layout.addLayout(self.stack)
+
+        self.effect = QGraphicsOpacityEffect(self)
+        self.setGraphicsEffect(self.effect)
+
+        self.anim = QPropertyAnimation(self.effect, b"opacity", self)
+        self.anim.setDuration(200)
+        self.anim.setEasingCurve(QEasingCurve.InOutQuad)
+        self.anim.finished.connect(self._on_anim_finished)
+
+        self._fading_out = False
+        self._is_front = True
+
+        self.setMinimumSize(220, 120)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.flip()
+        super().mousePressEvent(event)
+
+    def flip(self):
+        self._fading_out = True
+        self.anim.stop()
+        self.anim.setStartValue(1.0)
+        self.anim.setEndValue(0.0)
+        self.anim.start()
+
+    def _on_anim_finished(self):
+        if self._fading_out:
+            # swap side when fully transparent
+            self._is_front = not self._is_front
+            self.stack.setCurrentIndex(0 if self._is_front else 1)
+
+            # fade back in
+            self._fading_out = False
+            self.anim.stop()
+            self.anim.setStartValue(0.0)
+            self.anim.setEndValue(1.0)
+            self.anim.start()
+
+
+class ResultsPanel(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.container = QWidget()
+        self.vlayout = QVBoxLayout(self.container)
+        self.vlayout.setAlignment(Qt.AlignTop)
+
+        self.scroll = QScrollArea()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.container)
+
+        root_layout = QVBoxLayout(self)
+        root_layout.addWidget(self.scroll)
+        self.setStyleSheet(
+            """
+            background-color: #000066;
+            color: #ffffff;
+            border: 1px solid #555555;
+            """
+        )
+
+    def add_flashcard(self, front_text: str, back_text: str):
+        card = FlashCards(front_text, back_text)
+        self.vlayout.addWidget(card)
+        return card
 
 
 class MainWindow(QMainWindow):
@@ -132,7 +242,7 @@ class MainWindow(QMainWindow):
         self.add_button.setStyleSheet(
             """
             QPushButton {
-                background-color: #0074D9;
+                background-color: #01264d;
                 color: #ffffff;
                 border-radius: 12px;
                 padding: 8px 24px;
@@ -140,7 +250,7 @@ class MainWindow(QMainWindow):
                 font-weight: bold;
             }
             QPushButton:hover {
-                background-color: #3399FF;
+                background-color: #055bb5;
             }
             QPushButton:pressed {
                 background-color: #0053A6;
@@ -148,29 +258,23 @@ class MainWindow(QMainWindow):
             """
         )
 
-        self.result_panel = QTextEdit()
-        self.result_panel.setReadOnly(True)
-        self.result_panel.setMinimumHeight(200)
-        self.result_panel.setStyleSheet(
-            """
-            QTextEdit {
-                background-color: #000066;
-                color: #ffffff;
-                border: 1px solid #555555;
-            }
-            """
-        )
+        glow = QGraphicsDropShadowEffect(self)
+        glow.setBlurRadius(20)
+        glow.setColor(QColor("#3399ff"))
+        glow.setOffset(0, 0)
+        self.add_button.setGraphicsEffect(glow)
+        self.results_panel = ResultsPanel()
 
         container = QWidget()
         layout = QVBoxLayout(container)
         button_row = QHBoxLayout()
         button_row.addStretch()
         button_row.addWidget(self.add_button)
-
         layout.addLayout(button_row)
+
         splitter = QSplitter(Qt.Vertical)
         splitter.addWidget(self.canvas)
-        splitter.addWidget(self.result_panel)
+        splitter.addWidget(self.results_panel)
         splitter.setSizes([600, 400])
         layout.addWidget(splitter)
 
@@ -200,16 +304,12 @@ class MainWindow(QMainWindow):
             return
 
         self._seen_pairs.add(key)
-        self.result_panel.append(
-            f"\n=== Overlap detected: {name1} ↔ {name2} ===\nRunning interaction check..."
-        )
 
         # Run the interaction and MedlinePlus queries
         try:
             self.display_interaction_results(name1, name2)
         except Exception as e:
             # Show error both in GUI and console
-            self.result_panel.append(f"\nError while fetching data: {e}\n")
             QMessageBox.warning(self, "Error", f"An error occurred:\n{e}")
 
     def display_interaction_results(self, drug1: str, drug2: str):
@@ -262,21 +362,9 @@ class MainWindow(QMainWindow):
         med_sections.append(format_med_section("Drug 1 details", med1_array))
         med_sections.append(format_med_section("Drug 2 details", med2_array))
 
-        full_text = (
-            "\n"
-            + "=" * 60
-            + "\n"
-            + interaction_section
-            + "\n\n"
-            + "-" * 60
-            + "\n"
-            + "\n\n".join(med_sections)
-            + "\n"
-            + "=" * 60
-            + "\n"
-        )
-
-        self.result_panel.append(full_text)
+        self.results_panel.add_flashcard(f"interaction between {drug1} and {drug2}", interaction_section)
+        self.results_panel.add_flashcard(f"{drug1} side effects", med_sections[0])
+        self.results_panel.add_flashcard(f"{drug2} side effects", med_sections[1])
 
 
 if __name__ == "__main__":
