@@ -1,3 +1,7 @@
+'''
+This file includes code generated with the assistance of Claude (Anthropic, 2024).
+'''
+
 import requests
 from bs4 import BeautifulSoup
 import re

@@ -1,3 +1,7 @@
+'''
+This file includes code generated with the assistance of Claude (Anthropic, 2024).
+'''
+
 # Requests allows you to call HTML files as though you were a windows
 import requests
 # BeautifulSoup parses the raw HTML
