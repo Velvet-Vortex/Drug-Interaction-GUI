@@ -1,0 +1,152 @@
+{
+  "drugs": {
+    "aspirin": {
+      "title": "Aspirin Rectal",
+      "url": "https://medlineplus.gov/druginfo/meds/a621021.html",
+      "search_term": "Aspirin",
+      "side_effects": {
+        "common": [],
+        "serious": [
+          "vomiting blood or a substance that looks like coffee grounds",
+          "bright red blood in stools",
+          "black or tarry stools",
+          "hives, rash",
+          "swelling of the eyes, face, lips, tongue, or throat",
+          "wheezing or difficulty breathing",
+          "ringing in the ears",
+          "loss of hearing",
+          "Aspirin may cause other side effects. Call your doctor if you have any unusual problems while you are using this medication.",
+          "If you experience a serious side effect, you or your doctor may send a report to the Food and Drug Administration's (FDA) MedWatch Adverse Event Reporting program online (https://www.fda.gov/Safety/MedWatch) or by phone (1-800-332-1088)."
+        ],
+        "other": [],
+        "metadata": {
+          "sections_found": 2,
+          "extraction_date": "2025-11-30T14:52:40.461209"
+        }
+      },
+      "cached_at": "2025-11-30T14:52:40.466212"
+    },
+    "magnesium": {
+      "title": "Aluminum Hydroxide and Magnesium Hydroxide",
+      "url": "https://medlineplus.gov/druginfo/meds/a601013.html",
+      "search_term": "Magnesium",
+      "side_effects": {
+        "common": [],
+        "serious": [
+          "diarrhea",
+          "constipation",
+          "loss of appetite",
+          "unusual tiredness",
+          "muscle weakness"
+        ],
+        "other": [],
+        "metadata": {
+          "sections_found": 2,
+          "extraction_date": "2025-11-30T14:54:09.759507"
+        }
+      },
+      "cached_at": "2025-11-30T14:54:09.764510"
+    },
+    "acetaminophen": {
+      "title": "Acetaminophen Rectal",
+      "url": "https://medlineplus.gov/druginfo/meds/a621016.html",
+      "search_term": "acetaminophen",
+      "side_effects": {
+        "common": [],
+        "serious": [
+          "red, peeling, or blistering skin; rash",
+          "yellowing of the skin or the whites of the eyes; upper belly pain; dark urine; pale stools",
+          "Acetaminophen may cause other side effects. Call your doctor if you have any unusual problems while you are using this medication.",
+          "If you experience a serious side effect, you or your doctor may send a report to the Food and Drug Administration's (FDA) MedWatch Adverse Event Reporting program online (https://www.fda.gov/Safety/MedWatch) or by phone (1-800-332-1088)."
+        ],
+        "other": [],
+        "metadata": {
+          "sections_found": 2,
+          "extraction_date": "2025-11-30T16:11:50.068339"
+        }
+      },
+      "cached_at": "2025-11-30T16:11:50.078339"
+    },
+    "fentanyl": {
+      "title": "Fentanyl",
+      "url": "https://medlineplus.gov/druginfo/meds/a605043.html",
+      "search_term": "fentanyl",
+      "side_effects": {
+        "common": [],
+        "serious": [
+          "drowsiness",
+          "headache",
+          "stomach pain",
+          "gas",
+          "heartburn",
+          "weight loss",
+          "difficulty urinating",
+          "changes in vision",
+          "anxiety",
+          "depression",
+          "unusual thinking",
+          "unusual dreams",
+          "difficulty falling asleep or staying asleep",
+          "dry mouth",
+          "sudden reddening of the face, neck, or upper chest",
+          "uncontrollable shaking of a part of the body",
+          "back pain",
+          "pain, sores, or irritation in the mouth in the area where you placed the medication",
+          "swelling of the hands, arms, feet, ankles, or lower legs",
+          "changes in heartbeat",
+          "agitation, hallucinations (seeing things or hearing voices that do not exist), fever, sweating, confusion, fast heartbeat, shivering, severe muscle stiffness or twitching, loss of coordination,or diarrhea",
+          "nausea, vomiting, loss of appetite, weakness, or dizziness",
+          "inability to get or keep an erection",
+          "irregular menstruation",
+          "decreased sexual desire",
+          "seizures",
+          "rash; hives; itching; hoarseness; difficulty breathing or swallowing; or swelling of the face, mouth, tongue or throat",
+          "changes in heartbeat",
+          "chest pain",
+          "extreme drowsiness",
+          "Fentanyl may cause other side effects. Call your doctor if you have any unusual problems while using this medication.",
+          "If you experience a serious side effect, you or your doctor may send a report to the Food and Drug Administration's (FDA) MedWatch Adverse Event Reporting program online (https://www.fda.gov/Safety/MedWatch) or by phone (1-800-332-1088)."
+        ],
+        "other": [],
+        "metadata": {
+          "sections_found": 3,
+          "extraction_date": "2025-11-30T16:13:10.849533"
+        }
+      },
+      "cached_at": "2025-11-30T16:13:10.859533"
+    },
+    "caffeine": {
+      "title": "Ergotamine and Caffeine",
+      "url": "https://medlineplus.gov/druginfo/meds/a601048.html",
+      "search_term": "caffeine",
+      "side_effects": {
+        "common": [],
+        "serious": [
+          "nausea",
+          "vomiting",
+          "leg weakness",
+          "chest pain",
+          "rapid heartbeat",
+          "slow heartbeat",
+          "dizziness",
+          "muscle pain in the legs or arms",
+          "blue hands and feet",
+          "swelling",
+          "itching",
+          "pain, burning, or tingling in the fingers and toes",
+          "Ergotamine and caffeine may cause other side effects. Call your doctor if you have any unusual problems while taking this medication.",
+          "If you experience a serious side effect, you or your doctor may send a report to the Food and Drug Administration's (FDA) MedWatch Adverse Event Reporting program online (https://www.fda.gov/Safety/MedWatch) or by phone (1-800-332-1088)."
+        ],
+        "other": [],
+        "metadata": {
+          "sections_found": 3,
+          "extraction_date": "2025-11-30T17:18:36.954999"
+        }
+      },
+      "cached_at": "2025-11-30T17:18:36.987002"
+    }
+  },
+  "metadata": {
+    "last_updated": "2025-11-30T17:18:36.987002"
+  }
+}
