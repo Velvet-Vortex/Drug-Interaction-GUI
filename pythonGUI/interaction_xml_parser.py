@@ -1,3 +1,7 @@
+'''
+This file includes code generated with the assistance of Claude (Anthropic, 2024).
+'''
+
 # ElementTree reads XML structure and parses <url> and <loc> tags
 import xml.etree.ElementTree as ET
 # RegularExpressions removes Numeric ID's

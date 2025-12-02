@@ -1,3 +1,7 @@
+'''
+This file includes code generated with the assistance of ChatGPT (OpenAI), using GPT-5.1 on November 2025
+'''
+
 from PySide6.QtCore import (
     Qt,
     Signal,
