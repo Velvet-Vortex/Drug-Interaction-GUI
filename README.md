@@ -62,7 +62,17 @@ interaction between the two drugs, the side effects of the first drug, and the s
 effects of the second drug. Click on the flash cards to flip between term and 
 definition.
 
-## Authors
+## UML Diagrams
+These are the diagrams that were used to design the project. They are not
+accurate to the current project state, rather they were used to define the general
+functionality and structure to build off.
+
+![Drug Interaction Behavioral Model](drug-interaction-models/behavioral-model.png "Drug Interaction Behavioral Model")
+![Drug Interaction Interaction Model](drug-interaction-models/interaction-models.png "Drug Interaction Interaction Model")
+![Drug Interaction Structural Model](drug-interaction-models/structural-model.png "Drug Interaction Structural Model")
+
+
+## Authors]()
 Avalee Cruz - [@Velvet-Vortex](http://github.com/Velvet-Vortex)
 
 Levi Chinander - [@LochiRepo](https://github.com/LochiRepo)
