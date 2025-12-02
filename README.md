@@ -84,4 +84,4 @@ This project is licensed under the GNU GPL-3.0 License - see the LICENSE.md file
 UI code was adapted from the article "Drag & Drop Widgets with PySide6"
 by Martin Fitzpatrick found at https://www.pythonguis.com/faq/pyside6-drag-drop-widgets/.
 
-This project includes code and documentation generated with the assistance of ChatGPT (OpenAI), using GPT-5.1 on November 2025.
+This project includes code and documentation generated with the assistance of ChatGPT (OpenAI), using GPT-5.1 on November 2025 and Claude (Anthropic, 2024).
